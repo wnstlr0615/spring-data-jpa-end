@@ -1,5 +1,6 @@
 package study.querydsl.querydsl.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import study.querydsl.querydsl.entity.Member;
 
@@ -46,5 +47,32 @@ public class MemberJpaRepository {
         return em.createNamedQuery("Member.findByUsername", Member.class)
                 .setParameter("username", username)
                 .getResultList();
+    }
+    public List<Member> findByPage(int age, int limit, int offset){
+        return em.createQuery("" +
+                "select m from Member m" +
+                " where m.age=:age " +
+                " order by m.username desc", Member.class)
+                .setParameter("age", age)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public Long countTatal(int age) {
+        return em.createQuery("" +
+                "select count(m) from Member m" +
+                " where m.age=:age", Long.class)
+                .setParameter("age", age)
+                .getSingleResult();
+    }
+    public int bulkAgePlus(int age){
+        int resultCount=em.createQuery("" +
+                "update Member m" +
+                " set m.age=m.age+1" +
+                " where m.age>= :age")
+                .setParameter("age", age)
+                .executeUpdate();
+        return resultCount;
     }
 }

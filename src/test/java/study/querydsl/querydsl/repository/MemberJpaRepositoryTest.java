@@ -6,7 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.querydsl.entity.Member;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,13 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberJpaRepositoryTest {
     @Autowired
     MemberJpaRepository memberJpaRepository;
+    @PersistenceContext
+    EntityManager em;
     @Test
     public void testMember() throws Exception{
         //given
-        Member member = new Member("joon");
-        Member saveMember = memberJpaRepository.save(member);
+        Member member = initMember("joon", 10);
         //when
-        Member findMember = memberJpaRepository.find(saveMember.getId());
+        Member findMember = memberJpaRepository.find(member.getId());
         //then
         assertThat(findMember.getId()).isEqualTo(member.getId());
         assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
@@ -29,10 +33,8 @@ class MemberJpaRepositoryTest {
     }
     @Test
     public void basicCRUD(){
-        Member member1 = new Member("member1");
-        Member member2 = new Member("member1");
-        memberJpaRepository.save(member1);
-        memberJpaRepository.save(member2);
+        Member member1 = initMember("member1", 15);
+        Member member2 = initMember("member1", 20);
         Member findMember1 = memberJpaRepository.findById(member1.getId()).get();
         Member findMember2 = memberJpaRepository.findById(member2.getId()).get();
 
@@ -56,10 +58,8 @@ class MemberJpaRepositoryTest {
 
     @Test
     public void findByUsernameAndAgeGreaterThan(){
-        Member m1 = new Member("AAA", 10);
-        Member m2 = new Member("AAA", 20);
-        memberJpaRepository.save(m1);
-        memberJpaRepository.save(m2);
+        Member m1 =initMember("AAA", 10);
+        Member m2 = initMember("AAA", 20);
 
         List<Member> findMembers = memberJpaRepository.findByUsernameAndGreaterThan("AAA", 15);
         assertThat(findMembers.size()).isEqualTo(1);
@@ -69,10 +69,8 @@ class MemberJpaRepositoryTest {
 
     @Test
     public void findByUsernameTest(){
-        Member member1 = new Member("joon", 15);
-        Member member2 = new Member("sik", 15);
-        memberJpaRepository.save(member1);
-        memberJpaRepository.save(member2);
+        Member member1 = initMember("joon", 15);
+        Member member2 = initMember("joon1", 15);
 
         List<Member> findMembers = memberJpaRepository.findByUsername("joon");
 
@@ -80,6 +78,44 @@ class MemberJpaRepositoryTest {
         assertThat(findMembers.get(0)).isEqualTo(member1);
         assertThat(findMembers.get(0).getUsername()).isEqualTo("joon");
     }
+    @Transactional
+    public Member initMember(String name, int age) {
+        Member member = new Member(name, age);
+        memberJpaRepository.save(member);
+        return member;
+    }
 
+    @Test
+    public void findByAgePaging() {
+        Member member1 = initMember("joon1", 10);
+        Member member2 = initMember("joon2", 10);
+        Member member3 = initMember("joon3", 10);
+        Member member4 = initMember("joon4", 40);
+
+        List<Member> findMembers = memberJpaRepository.findByPage(10, 2, 1);
+        assertThat(findMembers.size()).isEqualTo(2);
+        assertThat(findMembers.get(0).getUsername()).isEqualTo(member2.getUsername());
+        Long count = memberJpaRepository.countTatal(10);
+        assertThat(count).isEqualTo(3);
+    }
+
+    @Test
+    public void bulkUpdate() throws Exception{
+        //given
+        Member member1 = initMember("member1", 10);
+        Member member2 = initMember("member2", 19);
+        Member member3 = initMember("member3", 20);
+        Member member4 = initMember("member4", 21);
+        Member member5 = initMember("member5", 40);
+        //when
+        int resultCnt = memberJpaRepository.bulkAgePlus(20);
+        em.flush();
+        em.clear();
+        Optional<Member> findMember = memberJpaRepository.findById(member3.getId());
+
+        //then
+        assertThat(resultCnt).isEqualTo(3);
+        assertThat(findMember.get().getAge()).isEqualTo(21);
+    }
 
 }
