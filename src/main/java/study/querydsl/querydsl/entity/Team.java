@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(exclude = {"members"})
-public class Team {
+public class Team  extends BaseTimeEntity{
     @Id
     @GeneratedValue
     @Column(name = "team_id")

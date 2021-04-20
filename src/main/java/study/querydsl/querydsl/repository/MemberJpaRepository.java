@@ -75,4 +75,9 @@ public class MemberJpaRepository {
                 .executeUpdate();
         return resultCount;
     }
+    public List<Member> findMemberFetchJoin(){
+        return em.createQuery("" +
+                "select m from Member m " +
+                "join fetch m.team ", Member.class).getResultList();
+    }
 }

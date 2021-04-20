@@ -3,11 +3,14 @@ package study.querydsl.querydsl.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Description;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.querydsl.entity.Member;
+import study.querydsl.querydsl.entity.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUtil;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,9 @@ class MemberJpaRepositoryTest {
     MemberJpaRepository memberJpaRepository;
     @PersistenceContext
     EntityManager em;
+    @Autowired
+    TeamJpaRepository teamRepository;
+
     @Test
     public void testMember() throws Exception{
         //given
@@ -117,5 +123,35 @@ class MemberJpaRepositoryTest {
         assertThat(resultCnt).isEqualTo(3);
         assertThat(findMember.get().getAge()).isEqualTo(21);
     }
+    @Test
+    @Description("지연 로딩으로 인한 N+1 문제를 fetch join으로 해결")
+    public void findMemberFetchJoin() throws Exception{
+        //given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member member1 = initMember("member1", 10);
+        Member member2 = initMember("member2", 20);
+        member1.setTeam(teamA);
+        member2.setTeam(teamB);
+        em.flush();
+        em.clear();
+
+        //when
+        List<Member> members = memberJpaRepository.findMemberFetchJoin();
+
+        //then
+        PersistenceUtil util=em.getEntityManagerFactory().getPersistenceUnitUtil();
+        System.out.println("isLoaded :"+util.isLoaded(members.get(0).getTeam()));
+        for (Member member : members) {
+            member.getTeam().getName();
+        }
+        System.out.println("isLoaded :"+util.isLoaded(members.get(0).getTeam()));
+
+    }
+
 
 }

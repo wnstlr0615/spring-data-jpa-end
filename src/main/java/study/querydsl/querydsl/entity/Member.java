@@ -12,7 +12,7 @@ import javax.persistence.*;
 )
 @NoArgsConstructor @AllArgsConstructor
 @ToString(exclude = {"team"})
-public class Member {
+public class Member extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
