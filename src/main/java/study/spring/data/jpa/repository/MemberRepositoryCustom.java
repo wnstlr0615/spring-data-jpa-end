@@ -1,6 +1,6 @@
-package study.querydsl.querydsl.repository;
+package study.spring.data.jpa.repository;
 
-import study.querydsl.querydsl.entity.Member;
+import study.spring.data.jpa.entity.Member;
 
 import java.util.List;
 

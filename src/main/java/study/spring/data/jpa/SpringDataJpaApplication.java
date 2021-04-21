@@ -1,6 +1,6 @@
-package study.querydsl.querydsl;
+package study.spring.data.jpa;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +14,11 @@ import java.util.UUID;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class QueryDslApplication {
+public class SpringDataJpaApplication {
     @PersistenceContext
     EntityManager em;
     public static void main(String[] args) {
-        SpringApplication.run(QueryDslApplication.class, args);
+        SpringApplication.run(SpringDataJpaApplication.class, args);
     }
     @Bean
     public AuditorAware<String> auditorProvider(){

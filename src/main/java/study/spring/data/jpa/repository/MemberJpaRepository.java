@@ -1,8 +1,7 @@
-package study.querydsl.querydsl.repository;
+package study.spring.data.jpa.repository;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
-import study.querydsl.querydsl.entity.Member;
+import study.spring.data.jpa.entity.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

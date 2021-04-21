@@ -1,13 +1,12 @@
-package study.querydsl.querydsl.repository;
+package study.spring.data.jpa.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-import study.querydsl.querydsl.MemberDto;
-import study.querydsl.querydsl.entity.Member;
+import study.spring.data.jpa.MemberDto;
+import study.spring.data.jpa.entity.Member;
 
-import javax.persistence.Entity;
 import javax.persistence.QueryHint;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Query("select m.username from Member m")
     List<String> findByUsernameList(String username);
 
-    @Query("select new study.querydsl.querydsl.MemberDto(m.username, m.age) from Member m where m.username =:username")
+    @Query("select new study.spring.data.jpa.MemberDto(m.username, m.age) from Member m where m.username =:username")
     List<MemberDto> findMemberDtoByUsername(@Param("username") String username);
 
     @Query("select m from  Member m where m.username in :names")

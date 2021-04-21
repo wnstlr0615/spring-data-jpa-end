@@ -1,4 +1,4 @@
-package study.querydsl.querydsl;
+package study.spring.data.jpa;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;

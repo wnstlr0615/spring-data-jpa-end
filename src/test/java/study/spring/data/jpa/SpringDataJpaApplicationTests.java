@@ -1,10 +1,10 @@
-package study.querydsl.querydsl;
+package study.spring.data.jpa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class QueryDslApplicationTests {
+class SpringDataJpaApplicationTests {
 
     @Test
     void contextLoads() {

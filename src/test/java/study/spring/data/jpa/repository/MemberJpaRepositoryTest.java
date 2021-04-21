@@ -1,12 +1,12 @@
-package study.querydsl.querydsl.repository;
+package study.spring.data.jpa.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
 import org.springframework.transaction.annotation.Transactional;
-import study.querydsl.querydsl.entity.Member;
-import study.querydsl.querydsl.entity.Team;
+import study.spring.data.jpa.entity.Member;
+import study.spring.data.jpa.entity.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

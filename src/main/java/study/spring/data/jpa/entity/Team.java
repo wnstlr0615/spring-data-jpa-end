@@ -1,4 +1,4 @@
-package study.querydsl.querydsl.entity;
+package study.spring.data.jpa.entity;
 
 import lombok.*;
 

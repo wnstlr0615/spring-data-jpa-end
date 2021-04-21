@@ -1,13 +1,12 @@
-package study.querydsl.querydsl.repository;
+package study.spring.data.jpa.repository;
 
 import org.springframework.stereotype.Repository;
-import study.querydsl.querydsl.entity.Team;
+import study.spring.data.jpa.entity.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 @Repository
 public class TeamJpaRepository {
